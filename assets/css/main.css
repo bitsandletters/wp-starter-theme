@@ -1,0 +1,15 @@
+@layer wp-base, tw-base, tw-components, tw-utilities;
+
+@layer tw-base {
+  @import "tailwindcss/base";
+}
+
+@layer tw-components {
+  @import "tailwindcss/components";
+}
+
+@layer tw-utilities {
+  @import "tailwindcss/utilities";
+}
+
+/* Your custom CSS here */
