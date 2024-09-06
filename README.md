@@ -1,82 +1,77 @@
 # WordPress Starter Theme
 
-A modern WordPress starter theme with Tailwind CSS, Alpine.js, and Vite.
+A modern WordPress starter theme with Tailwind CSS, Alpine.js, and Vite. We use this as a starting point for new WP theme builds at [Bits & Letters](https://bitsandletters.co).
 
 ## Features
 
-- Tailwind CSS for styling
-- Alpine.js for interactivity
 - Vite for asset bundling and development server
-- Docker setup for local development
-- VSCode devcontainer configuration
-- Custom home page template
+- CSS cascade layers
+- Tailwind CSS for styling, with a `revert-layer` class that lets you fall back to WordPress defaults on a per-element basis (e.g. for block styles)
+- TypeScript support
+- Alpine.js for interactivity
 
 ## Requirements
 
-- Node.js (v14+)
-- Docker and Docker Compose
-- Visual Studio Code (for devcontainer usage)
+In addition to whatever WordPress local dev setup you prefer, you'll need a recent version of Node.js (v20+ should be fine). I like to use [Volta](https://volta.sh/) to install and manage Node, but other version/package managers should work fine.
+
+To install Vite, Tailwind, and all other dependencies, navigate into the theme's directory in your terminal and run `npm install` (or `yarn`, `pnpm`, etc if you prefer).
+
+```sh
+cd /path/to/wp/wp-content/themes/wp-starter-theme
+npm install
+```
 
 ## Local Development
 
-### Using VSCode Devcontainer
+This setup supports two different approaches to working locally:
 
-1. Open the project folder in VSCode.
-2. When prompted, click "Reopen in Container" or run the "Remote-Containers: Reopen in Container" command from the command palette.
-3. VSCode will build the Docker container and set up the development environment.
+### Production builds + file watcher
 
-### Manual Setup
+This is most similar to how many of us are used to working with WordPress, and the output will be most similar to production because you're seeing the same built assets you'll eventually upload to a server.
 
-1. Clone this repository into your WordPress themes directory.
+For this one, from the theme directory run:
 
-2. Install dependencies:
+```sh
+vite build --watch
+```
 
-   ```
-   npm install
-   ```
+### Live dev server
 
-3. Start the Docker environment:
+This method is only available if your WordPress install is set up in local or development mode, _and_ the dev server is running, otherwise it'll fall back to production builds as described above.
 
-   ```
-   npm run docker:start
-   ```
+To enable local development mode, add this line to your `wp-config.php`:
 
-4. In a new terminal, start the Vite development server:
+```php
+if (! defined('WP_ENVIRONMENT_TYPE')) {
+  define('WP_ENVIRONMENT_TYPE', 'local');
+}
+```
 
-   ```
-   npm run dev
-   ```
+The theme (and any other code) can check whether you're running locally via the `wp_get_environment_type()` core function.
 
-5. Visit http://localhost:8000 to see your WordPress site.
+To run the dev server, simply `cd` into the theme directory and run:
 
-   - The WordPress admin panel is at http://localhost:8000/wp-admin
-   - Default credentials are:
-     - Username: admin
-     - Password: password
-
-6. To stop the Docker environment:
-   ```
-   npm run docker:stop
-   ```
+```sh
+vite
+```
 
 ## Building for Production
 
 To build assets for production:
 
 ```
-npm run build
+vite build
 ```
 
 ## Customization
 
-- Modify `tailwind.config.js` to customize your Tailwind CSS setup.
-- Edit files in the `template-parts` directory to change the structure of different page elements.
+- Modify `tailwind.config.ts` to customize your Tailwind CSS setup.
 - Update `assets/css/main.css` to add custom styles.
-- Modify `assets/js/main.js` to add custom JavaScript.
+- Modify `assets/js/main.ts` to add custom JavaScript.
 
 ## Copyright
 
-© 2023 Bits & Letters, LLC. All rights reserved.
+© 2024 Bits & Letters, LLC. All rights reserved.
 
 This WordPress Starter Theme is proprietary software owned by Bits & Letters, LLC.
 No part of this software, including this file, may be copied, modified, propagated,
