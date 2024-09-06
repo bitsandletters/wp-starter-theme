@@ -1,50 +1,51 @@
 <?php
 
-/**
- * WordPress Starter Theme functions and definitions
- *
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
- *
- * @package WordPress_Starter_Theme
- *
- * @copyright 2023 Bits & Letters, LLC
- * This file is proprietary software owned by Bits & Letters, LLC.
- * No part of this software, including this file, may be copied, modified,
- * propagated, or distributed except as expressly permitted by Bits & Letters, LLC.
- */
+require_once("inc/vite-support.php");
+// require_once("inc/admin-bar-css.php");
+// require_once("inc/custom-menus.php");
 
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
+add_action("after_setup_theme", function () {
+  add_theme_support("title-tag");
+  add_theme_support("align-wide");
+  add_theme_support("responsive-embeds");
+  add_theme_support("post-thumbnails");
+  add_theme_support("html5", ["caption", "comment-form", "comment-list", "gallery", "search-form", "script", "style"]);
+  add_theme_support("automatic-feed-links");
+  add_theme_support("post-formats", ["aside", "image", "link", "quote", "status"]);
+  add_theme_support("customize-selective-refresh-widgets");
+  add_theme_support("custom-logo");
+  add_theme_support("custom-background");
+  add_theme_support("custom-header");
 
-// Disable comments and other UGC features
-require_once get_template_directory() . '/inc/disable-comments.php';
+  add_image_size("opengraph", 1200, 630, true);
 
-// Enqueue scripts and styles
-require_once get_template_directory() . '/inc/enqueue-scripts.php';
+  register_nav_menus([
+    "primary" => "Main Menu",
+    "social" => "Social Menu",
+    "footer" => "Footer Menu",
+  ]);
+});
 
-// Theme setup
-function wp_starter_theme_setup()
+add_action('wp_enqueue_scripts', function () {
+  wp_enqueue_style('boomer-wp-css', get_stylesheet_uri(), false);
+
+  // Wrap global styles in wordpress cascade layer
+  $styles = wp_styles();
+  $styles->registered['global-styles']->extra['after'] = array_merge(['@layer wordpress {'], $styles->registered['global-styles']->extra['after'], ['}']);
+});
+
+function dd_post_excerpt($classString = '')
 {
-  add_theme_support('title-tag');
-  add_theme_support('post-thumbnails');
-  add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption'));
-  add_theme_support('customize-selective-refresh-widgets');
-  add_theme_support('wp-block-styles');
-  add_theme_support('align-wide');
-  add_theme_support('responsive-embeds');
+  if (!has_excerpt()) return "";
 
-  register_nav_menus(array(
-    'primary' => __('Primary Menu', 'wp-starter-theme'),
-  ));
+  printf('<p class="%s">%s</p>', $classString, get_the_excerpt());
 }
-add_action('after_setup_theme', 'wp_starter_theme_setup');
 
-// Wrap WordPress styles in wp-base layer
-function wp_starter_theme_wrap_styles_in_layers($html, $handle)
+function dd_post_dateline()
 {
-  if ($handle === 'wp-block-library' || $handle === 'global-styles') {
-    $html = str_replace('<style', '<style>@layer wp-base {', $html);
-    $html = str_replace('</style>', '}</style>', $html);
-  }
-  return $html;
+  printf(
+    '<time datetime="%s">%s</time>',
+    get_the_date('Y-m-d'),
+    get_the_date('F j, Y')
+  );
 }
-add_filter('style_loader_tag', 'wp_starter_theme_wrap_styles_in_layers', 10, 2);

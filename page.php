@@ -7,7 +7,7 @@ get_header();
   while (have_posts()) :
     the_post();
   ?>
-    <article id="page-<?php the_ID(); ?>" <?php post_class(); ?>>
+    <article id="page-<?php the_ID(); ?>" <?php post_class('revert-layer'); ?>>
       <h1 class="text-3xl font-bold mb-4"><?php the_title(); ?></h1>
       <div class="prose max-w-none">
         <?php the_content(); ?>

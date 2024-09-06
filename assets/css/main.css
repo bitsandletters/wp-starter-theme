@@ -1,15 +1,18 @@
-@layer wp-base, tw-base, tw-components, tw-utilities;
+@layer wordpress, tw-base, tw-components, tw-utilities;
 
-@layer tw-base {
-  @import "tailwindcss/base";
-}
-
-@layer tw-components {
-  @import "tailwindcss/components";
-}
-
-@layer tw-utilities {
-  @import "tailwindcss/utilities";
-}
+@import "tailwindcss/base" layer(tw-base);
+@import "tailwindcss/components" layer(tw-components);
+@import "tailwindcss/utilities" layer(tw-utilities);
 
 /* Your custom CSS here */
+
+@layer tw-base {
+  .revert-layer,
+  .revert-layer * {
+    all: revert-layer;
+  }
+  .revert-layer {
+    @apply border border-gray-300 p-6;
+    border: 1px solid;
+  }
+}

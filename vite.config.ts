@@ -1,31 +1,15 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
+// vite.config.js
+import { defineConfig } from "vite"
+import liveReload from "vite-plugin-live-reload"
 
 export default defineConfig({
-  plugins: [],
-  root: '',
-  base: process.env.NODE_ENV === 'development'
-    ? '/'
-    : '/wp-content/themes/wp-starter-theme/dist/',
+  plugins: [liveReload("./**/*.php", "./theme.json")],
+  appType: 'custom',
   build: {
-    outDir: resolve(__dirname, 'dist'),
-    emptyOutDir: true,
+    outDir: './dist',
     manifest: true,
-    target: 'es2018',
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'assets/js/main.ts'),
-      },
+      input: './assets/js/main.ts',
     },
   },
-  server: {
-    host: '0.0.0.0',
-    cors: true,
-    strictPort: true,
-    port: 3000,
-    https: false,
-    hmr: {
-      host: 'localhost',
-    },
-  },
-});
+})

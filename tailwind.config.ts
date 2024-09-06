@@ -8,7 +8,6 @@ export default {
     './assets/**/*.ts',
   ],
   safelist: [
-    '@layer wp-base, tw-base, tw-components, tw-utilities',
   ],
   theme: {
     extend: {
